@@ -6,6 +6,10 @@ import { LocaleProvider } from "@/components/layout/LocaleProvider";
 export const metadata: Metadata = {
   title: "Noctirae — Understand Your Dreams",
   description: "AI-powered dream interpretation with psychological and esoteric insights",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  },
 };
 
 export const viewport: Viewport = {
