@@ -30,6 +30,7 @@ const zh: Translations = {
     errorEmpty: "请先描述你的梦境。",
     errorLimit: "免费版每天只能解读1个梦。升级至高级版可无限解读。",
     errorWords: "梦境文字超过500字限制",
+    errorSignIn: "请登录以解读您的梦境。",
     errorFailed: "无法解读该梦境。请重试。",
     interpretationIntro: "以下是你的梦境解读：",
   },

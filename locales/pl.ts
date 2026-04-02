@@ -30,6 +30,7 @@ const pl: Translations = {
     errorEmpty: "Proszę najpierw opisz swój sen.",
     errorLimit: "Poziom bezpłatny pozwala na 1 sen dziennie. Przejdź na Premium, aby uzyskać nieograniczone interpretacje.",
     errorWords: "Tekst snu przekracza limit 500 słów",
+    errorSignIn: "Zaloguj się, aby interpretować swoje sny.",
     errorFailed: "Nie udało mi się zinterpretować tego snu. Proszę spróbuj ponownie.",
     interpretationIntro: "Oto interpretacja Twojego snu:",
   },

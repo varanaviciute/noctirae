@@ -30,6 +30,7 @@ const it: Translations = {
     errorEmpty: "Per favore, descrivi prima il tuo sogno.",
     errorLimit: "Il livello gratuito consente 1 sogno al giorno. Passa a Premium per interpretazioni illimitate.",
     errorWords: "Il testo del sogno supera il limite di 500 parole",
+    errorSignIn: "Accedi per interpretare i tuoi sogni.",
     errorFailed: "Non sono riuscito a interpretare quel sogno. Per favore, riprova.",
     interpretationIntro: "Ecco l'interpretazione del tuo sogno:",
   },
