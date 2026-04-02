@@ -9,6 +9,10 @@
   --foreground: #e8e0ff;
 }
 
+html {
+  background-color: #0a0614;
+}
+
 @layer base {
   * {
     @apply border-dream-900/30;
@@ -68,6 +72,10 @@
 }
 
 /* Light mode */
+.light html {
+  background-color: #f0eeff;
+}
+
 .light body {
   background: linear-gradient(135deg, #f0eeff 0%, #f8f5ff 50%, #ede8ff 100%);
   color: #1e1244;
