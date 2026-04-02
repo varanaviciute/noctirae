@@ -22,6 +22,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="theme-color" content="#0a0614" />
+      </head>
       <body>
         <ThemeProvider><LocaleProvider>{children}</LocaleProvider></ThemeProvider>
       </body>
