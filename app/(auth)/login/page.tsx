@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { useSearchParams } from "next/navigation";
 import { Moon, Sparkles, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/components/layout/LocaleProvider";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const supabase = createClient();
   const t = useT();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -61,6 +63,10 @@ export default function LoginPage() {
         <div className="glass-card rounded-2xl p-8 dream-glow">
           <h2 className="text-xl font-semibold text-dream-100 mb-6">{t.auth.welcomeBack}</h2>
 
+          {searchParams.get("reset") === "success" && (
+            <p className="text-green-400 text-sm bg-green-500/10 rounded-lg px-3 py-2 mb-4">{t.auth.passwordUpdated}</p>
+          )}
+
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-sm text-dream-400 mb-1.5">{t.auth.email}</label>
@@ -75,7 +81,12 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm text-dream-400 mb-1.5">{t.auth.password}</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-sm text-dream-400">{t.auth.password}</label>
+                <Link href="/forgot-password" className="text-xs text-dream-600 hover:text-dream-400 transition-colors">
+                  {t.auth.forgotPassword}
+                </Link>
+              </div>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -134,5 +145,13 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
