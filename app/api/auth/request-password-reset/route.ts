@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   const { data, error } = await supabase.auth.admin.generateLink({
     type: "recovery",
     email,
-    options: { redirectTo: "https://noctirae.com/reset-password" },
+    options: { redirectTo: "https://noctirae.com/auth/reset-callback" },
   });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
