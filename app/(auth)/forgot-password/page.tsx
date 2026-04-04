@@ -4,12 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/components/layout/LocaleProvider";
 
 export default function ForgotPasswordPage() {
   const t = useT();
-  const supabase = createClient();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -20,13 +18,16 @@ export default function ForgotPasswordPage() {
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+    const res = await fetch("/api/auth/request-password-reset", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
     });
+    const data = await res.json();
 
     setLoading(false);
-    if (error) {
-      setError(error.message);
+    if (!res.ok) {
+      setError(data.error ?? "Failed to send reset email");
     } else {
       setSent(true);
     }

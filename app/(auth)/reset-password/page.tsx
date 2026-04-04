@@ -19,19 +19,29 @@ function ResetPasswordForm() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    // PKCE flow: code in query param
     const code = searchParams.get("code");
     if (code) {
       supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
         if (error) setError(error.message);
         else setReady(true);
       });
-    } else {
-      // Came here without code — check if already have recovery session
-      supabase.auth.getSession().then(({ data }) => {
-        if (data.session) setReady(true);
-        else router.push("/forgot-password");
-      });
+      return;
     }
+
+    // Implicit flow: tokens in hash, Supabase fires PASSWORD_RECOVERY event
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setReady(true);
+      }
+    });
+
+    // Also check if already in a recovery session
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) setReady(true);
+    });
+
+    return () => subscription.unsubscribe();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
