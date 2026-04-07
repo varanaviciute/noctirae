@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
   try {
     await resend.emails.send({
-      from: "Noctirae Support <onboarding@resend.dev>",
+      from: "Noctirae Support <noreply@noctirae.com>",
       to: SUPPORT_EMAIL,
       subject: `Support request from ${name}`,
       html: `
