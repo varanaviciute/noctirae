@@ -127,7 +127,7 @@ const uk: Translations = {
     trialButton: "Почати 3-денний безкоштовний період",
     cancelStripe: "Скасування будь-коли · На базі Stripe",
     premiumActive: "Premium активний",
-    deactivate: "Деактивувати Premium (тест)",
+    manageSubscription: "Керування підпискою",
     language: "Мова",
     help: "Допомога та підтримка",
     deleteAccount: "Видалити обліковий запис",

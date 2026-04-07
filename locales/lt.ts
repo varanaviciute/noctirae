@@ -127,7 +127,7 @@ const lt: Translations = {
     trialButton: "Pradėti 3 dienų nemokamą bandymą",
     cancelStripe: "Atšaukiama bet kada · Powered by Stripe",
     premiumActive: "Premium aktyvus",
-    deactivate: "Deaktyvuoti Premium (testas)",
+    manageSubscription: "Atsisakyti prenumeratos",
     language: "Kalba",
     help: "Pagalba ir palaikymas",
     deleteAccount: "Ištrinti paskyrą",

@@ -127,7 +127,7 @@ const ja: Translations = {
     trialButton: "3日間無料トライアルを開始",
     cancelStripe: "いつでもキャンセル可能 · Stripe提供",
     premiumActive: "プレミアム有効",
-    deactivate: "プレミアムを無効化（テスト）",
+    manageSubscription: "サブスクリプションを管理",
     language: "言語",
     help: "ヘルプとサポート",
     deleteAccount: "アカウントを削除",

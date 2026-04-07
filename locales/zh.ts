@@ -127,7 +127,7 @@ const zh: Translations = {
     trialButton: "开始3天免费试用",
     cancelStripe: "随时取消 · 由Stripe提供支持",
     premiumActive: "高级版已激活",
-    deactivate: "停用高级版（测试）",
+    manageSubscription: "管理订阅",
     language: "语言",
     help: "帮助与支持",
     deleteAccount: "删除账户",

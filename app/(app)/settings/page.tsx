@@ -16,6 +16,7 @@ import { useT } from "@/components/layout/LocaleProvider";
 interface ProfileData {
   email: string;
   is_premium: boolean;
+  stripe_customer_id: string | null;
   streak_count: number;
   created_at: string;
 }
@@ -54,6 +55,17 @@ function SettingsContent() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ plan: selectedPlan }),
     });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      setSubscribing(false);
+    }
+  }
+
+  async function handleManageSubscription() {
+    setSubscribing(true);
+    const res = await fetch("/api/billing-portal", { method: "POST" });
     const data = await res.json();
     if (data.url) {
       window.location.href = data.url;
@@ -214,13 +226,15 @@ function SettingsContent() {
               </div>
               <Crown size={20} className="text-yellow-400" />
             </div>
-            <button
-              onClick={handleSubscribe}
-              disabled={subscribing}
-              className="w-full py-2 rounded-xl text-xs text-dream-500 hover:text-dream-300 border border-dream-800/30 hover:bg-dream-900/40 transition-all"
-            >
-              {t.settings.deactivate}
-            </button>
+            {profile?.stripe_customer_id ? (
+              <button
+                onClick={handleManageSubscription}
+                disabled={subscribing}
+                className="w-full py-2 rounded-xl text-xs text-dream-500 hover:text-dream-300 border border-dream-800/30 hover:bg-dream-900/40 transition-all"
+              >
+                {subscribing ? <Loader2 size={14} className="animate-spin mx-auto" /> : t.settings.manageSubscription}
+              </button>
+            ) : null}
           </div>
         )}
 

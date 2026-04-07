@@ -127,7 +127,7 @@ const ru: Translations = {
     trialButton: "Начать 3-дневный бесплатный период",
     cancelStripe: "Отмена в любое время · На базе Stripe",
     premiumActive: "Premium активен",
-    deactivate: "Деактивировать Premium (тест)",
+    manageSubscription: "Управление подпиской",
     language: "Язык",
     help: "Помощь и поддержка",
     deleteAccount: "Удалить аккаунт",

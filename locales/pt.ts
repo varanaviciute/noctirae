@@ -127,7 +127,7 @@ const pt: Translations = {
     trialButton: "Iniciar teste gratuito de 3 dias",
     cancelStripe: "Cancele a qualquer momento · Desenvolvido por Stripe",
     premiumActive: "Premium ativo",
-    deactivate: "Desativar Premium (teste)",
+    manageSubscription: "Gerenciar assinatura",
     language: "Idioma",
     help: "Ajuda e suporte",
     deleteAccount: "Excluir conta",

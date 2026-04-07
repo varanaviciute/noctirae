@@ -8,7 +8,7 @@ export async function GET() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("is_premium, name")
+    .select("is_premium, name, stripe_customer_id")
     .eq("id", user.id)
     .single();
 
@@ -16,6 +16,7 @@ export async function GET() {
     email: user.email,
     name: profile?.name ?? (user.user_metadata?.name as string) ?? "",
     is_premium: profile?.is_premium ?? false,
+    stripe_customer_id: profile?.stripe_customer_id ?? null,
     streak_count: 0,
     created_at: user.created_at,
   });

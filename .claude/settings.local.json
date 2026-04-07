@@ -8,7 +8,12 @@
       "Bash(npm install:*)",
       "Bash(node -e \":*)",
       "Bash(ls /Users/karinka/Projects/noctirae/app/api/mock-*)",
-      "Bash(grep \"NEXT_PUBLIC_SUPABASE\\\\|SUPABASE_SERVICE\\\\|SUPABASE_URL\" /Users/karinka/Projects/noctirae/.env*)"
+      "Bash(grep \"NEXT_PUBLIC_SUPABASE\\\\|SUPABASE_SERVICE\\\\|SUPABASE_URL\" /Users/karinka/Projects/noctirae/.env*)",
+      "Bash(sed -i '' 's/deactivate: \"Deactivate Premium \\(test\\)\"/manageSubscription: \"Manage subscription\"/' locales/en.ts)",
+      "Bash(sed -i '' 's/deactivate: \"Деактивировать Premium \\(тест\\)\"/manageSubscription: \"Управление подпиской\"/' locales/ru.ts)",
+      "Bash(sed -i '' 's/deactivate: \"プレミアムを無効化（テスト）\"/manageSubscription: \"サブスクリプションを管理\"/' locales/ja.ts)",
+      "Bash(sed -i '' 's/deactivate: \"Desativar Premium \\(teste\\)\"/manageSubscription: \"Gerenciar assinatura\"/' locales/pt.ts)",
+      "Bash(sed -i '' 's/deactivate: \"停用高级版（测试）\"/manageSubscription: \"管理订阅\"/' locales/zh.ts)"
     ]
   }
 }

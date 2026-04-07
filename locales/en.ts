@@ -125,7 +125,7 @@ const en = {
     trialButton: "Start 3-day free trial",
     cancelStripe: "Cancel anytime · Powered by Stripe",
     premiumActive: "Premium Active",
-    deactivate: "Deactivate Premium (test)",
+    manageSubscription: "Manage subscription",
     language: "Language",
     help: "Help & Support",
     deleteAccount: "Delete Account",

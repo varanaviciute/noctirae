@@ -127,7 +127,7 @@ const pl: Translations = {
     trialButton: "Rozpocznij 3-dniowy bezpłatny okres próbny",
     cancelStripe: "Anuluj w dowolnym momencie · Obsługiwane przez Stripe",
     premiumActive: "Premium aktywne",
-    deactivate: "Dezaktywuj Premium (test)",
+    manageSubscription: "Zarządzaj subskrypcją",
     language: "Język",
     help: "Pomoc i wsparcie",
     deleteAccount: "Usuń konto",
