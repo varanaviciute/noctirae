@@ -22,8 +22,9 @@ export async function POST(request: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
 
-  const resetLink = data.properties?.action_link;
-  if (!resetLink) return NextResponse.json({ error: "Failed to generate link" }, { status: 500 });
+  const tokenHash = data.properties?.hashed_token;
+  if (!tokenHash) return NextResponse.json({ error: "Failed to generate link" }, { status: 500 });
+  const resetLink = `https://noctirae.com/auth/reset-callback?token_hash=${tokenHash}&type=recovery`;
 
   await resend.emails.send({
     from: "Noctirae <noreply@noctirae.com>",
