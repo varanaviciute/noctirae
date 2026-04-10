@@ -33,6 +33,8 @@ function SettingsContent() {
   const [showAuthGate, setShowAuthGate] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showSupport, setShowSupport] = useState(false);
+  const [currentPlan, setCurrentPlan] = useState<"monthly" | "yearly" | null>(null);
+  const [switchingPlan, setSwitchingPlan] = useState(false);
 
   const success = searchParams.get("success");
   const canceled = searchParams.get("canceled");
@@ -44,6 +46,12 @@ function SettingsContent() {
       const data = await res.json();
       setProfile(data);
       setLoading(false);
+
+      if (data.is_premium) {
+        fetch("/api/subscription-info")
+          .then(r => r.json())
+          .then(d => { if (d.plan) setCurrentPlan(d.plan); });
+      }
 
       // If returning from successful payment but webhook not yet processed, poll
       if (success && !data.is_premium) {
@@ -76,6 +84,17 @@ function SettingsContent() {
     } else {
       setSubscribing(false);
     }
+  }
+
+  async function handleSwitchPlan(newPlan: "monthly" | "yearly") {
+    setSwitchingPlan(true);
+    await fetch("/api/switch-plan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plan: newPlan }),
+    });
+    setCurrentPlan(newPlan);
+    setSwitchingPlan(false);
   }
 
   async function handleManageSubscription() {
@@ -238,18 +257,61 @@ function SettingsContent() {
             <div className="flex items-center justify-between mb-3">
               <div>
                 <p className="text-sm font-semibold text-dream-200">{t.settings.premiumActive}</p>
+                {currentPlan && (
+                  <p className="text-xs text-dream-500 mt-0.5">
+                    {currentPlan === "monthly" ? "€5.99 / month" : "€49.99 / year"}
+                  </p>
+                )}
               </div>
               <Crown size={20} className="text-yellow-400" />
             </div>
-            {profile?.is_premium ? (
-              <button
-                onClick={handleManageSubscription}
-                disabled={subscribing}
-                className="w-full py-2 rounded-xl text-xs text-dream-500 hover:text-dream-300 border border-dream-800/30 hover:bg-dream-900/40 transition-all"
-              >
-                {subscribing ? <Loader2 size={14} className="animate-spin mx-auto" /> : t.settings.manageSubscription}
-              </button>
-            ) : null}
+
+            {currentPlan && (
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <button
+                  onClick={() => handleSwitchPlan("monthly")}
+                  disabled={switchingPlan || currentPlan === "monthly"}
+                  className={cn(
+                    "p-2.5 rounded-xl border text-left transition-all text-xs",
+                    currentPlan === "monthly"
+                      ? "border-dream-500/60 bg-dream-800/40 text-dream-200"
+                      : "border-dream-800/30 text-dream-500 hover:border-dream-700/40 hover:text-dream-300"
+                  )}
+                >
+                  <p className="font-semibold">{t.settings.monthly}</p>
+                  <p className="text-dream-500">€5.99 / mo</p>
+                </button>
+                <button
+                  onClick={() => handleSwitchPlan("yearly")}
+                  disabled={switchingPlan || currentPlan === "yearly"}
+                  className={cn(
+                    "p-2.5 rounded-xl border text-left transition-all text-xs relative overflow-hidden",
+                    currentPlan === "yearly"
+                      ? "border-dream-500/60 bg-dream-800/40 text-dream-200"
+                      : "border-dream-800/30 text-dream-500 hover:border-dream-700/40 hover:text-dream-300"
+                  )}
+                >
+                  <span className="absolute top-1 right-1 text-[9px] bg-dream-600/60 text-dream-200 px-1 py-0.5 rounded-full">{t.settings.save30}</span>
+                  <p className="font-semibold">{t.settings.yearly}</p>
+                  <p className="text-dream-500">€49.99 / yr</p>
+                </button>
+              </div>
+            )}
+
+            {switchingPlan && (
+              <div className="flex items-center justify-center gap-2 py-2 mb-3">
+                <Loader2 size={14} className="animate-spin text-dream-500" />
+                <span className="text-xs text-dream-500">Switching plan...</span>
+              </div>
+            )}
+
+            <button
+              onClick={handleManageSubscription}
+              disabled={subscribing}
+              className="w-full py-2 rounded-xl text-xs text-dream-500 hover:text-dream-300 border border-dream-800/30 hover:bg-dream-900/40 transition-all"
+            >
+              {subscribing ? <Loader2 size={14} className="animate-spin mx-auto" /> : t.settings.manageSubscription}
+            </button>
           </div>
         )}
 
