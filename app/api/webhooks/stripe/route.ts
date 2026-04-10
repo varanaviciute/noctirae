@@ -49,12 +49,12 @@ export async function POST(request: NextRequest) {
         stripe_subscription_id: subscriptionId,
         status: subscription.status,
         current_period_end: new Date(((subscription as any).current_period_end ?? 0) * 1000).toISOString(),
-      });
+      }, { onConflict: "stripe_subscription_id" });
       if (subError) console.error("[webhook] subscriptions upsert error", subError);
 
       const { error: profileError } = await supabase
         .from("profiles")
-        .update({ is_premium: true, stripe_customer_id: session.customer as string })
+        .update({ is_premium: true })
         .eq("id", userId);
       if (profileError) console.error("[webhook] profiles update error", profileError);
       else console.log("[webhook] profile updated to premium for user", userId);
