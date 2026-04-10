@@ -44,6 +44,21 @@ function SettingsContent() {
       const data = await res.json();
       setProfile(data);
       setLoading(false);
+
+      // If returning from successful payment but webhook not yet processed, poll
+      if (success && !data.is_premium) {
+        let attempts = 0;
+        const interval = setInterval(async () => {
+          attempts++;
+          const r = await fetch("/api/mock-me");
+          if (!r.ok) { clearInterval(interval); return; }
+          const d = await r.json();
+          if (d.is_premium || attempts >= 10) {
+            setProfile(d);
+            clearInterval(interval);
+          }
+        }, 2000);
+      }
     }
     load();
   }, []);

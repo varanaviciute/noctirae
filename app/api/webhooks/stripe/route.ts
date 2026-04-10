@@ -35,21 +35,29 @@ export async function POST(request: NextRequest) {
       const userId = session.metadata?.user_id;
       const subscriptionId = session.subscription as string;
 
-      if (!userId || !subscriptionId) break;
+      console.log("[webhook] checkout.session.completed", { userId, subscriptionId, customer: session.customer });
+
+      if (!userId || !subscriptionId) {
+        console.error("[webhook] missing userId or subscriptionId", { metadata: session.metadata });
+        break;
+      }
 
       const subscription = await stripe.subscriptions.retrieve(subscriptionId);
 
-      await supabase.from("subscriptions").upsert({
+      const { error: subError } = await supabase.from("subscriptions").upsert({
         user_id: userId,
         stripe_subscription_id: subscriptionId,
         status: subscription.status,
         current_period_end: new Date(((subscription as any).current_period_end ?? 0) * 1000).toISOString(),
       });
+      if (subError) console.error("[webhook] subscriptions upsert error", subError);
 
-      await supabase
+      const { error: profileError } = await supabase
         .from("profiles")
         .update({ is_premium: true, stripe_customer_id: session.customer as string })
         .eq("id", userId);
+      if (profileError) console.error("[webhook] profiles update error", profileError);
+      else console.log("[webhook] profile updated to premium for user", userId);
       break;
     }
 
