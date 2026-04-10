@@ -241,7 +241,7 @@ function SettingsContent() {
               </div>
               <Crown size={20} className="text-yellow-400" />
             </div>
-            {profile?.stripe_customer_id ? (
+            {profile?.is_premium ? (
               <button
                 onClick={handleManageSubscription}
                 disabled={subscribing}

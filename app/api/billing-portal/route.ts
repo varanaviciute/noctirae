@@ -7,18 +7,21 @@ export async function POST() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("stripe_customer_id")
-    .eq("id", user.id)
+  const { data: sub } = await supabase
+    .from("subscriptions")
+    .select("stripe_subscription_id")
+    .eq("user_id", user.id)
     .single();
 
-  if (!profile?.stripe_customer_id) {
+  if (!sub?.stripe_subscription_id) {
     return NextResponse.json({ error: "No Stripe subscription" }, { status: 400 });
   }
 
+  const subscription = await stripe.subscriptions.retrieve(sub.stripe_subscription_id);
+  const customerId = subscription.customer as string;
+
   const session = await stripe.billingPortal.sessions.create({
-    customer: profile.stripe_customer_id,
+    customer: customerId,
     return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings`,
   });
 
