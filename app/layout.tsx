@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { LocaleProvider } from "@/components/layout/LocaleProvider";
+import { PostHogProvider } from "./providers";
 
 export const metadata: Metadata = {
   title: "Noctirae — Understand Your Dreams",
@@ -26,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#0a0614" />
       </head>
       <body>
-        <ThemeProvider><LocaleProvider>{children}</LocaleProvider></ThemeProvider>
+        <PostHogProvider><ThemeProvider><LocaleProvider>{children}</LocaleProvider></ThemeProvider></PostHogProvider>
       </body>
     </html>
   );
