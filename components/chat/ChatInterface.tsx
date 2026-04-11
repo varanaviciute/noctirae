@@ -8,6 +8,7 @@ import { VoiceRecorder } from "./VoiceRecorder";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useT } from "@/components/layout/LocaleProvider";
+import { usePostHog } from "posthog-js/react";
 
 interface ChatInterfaceProps {
   isPremium: boolean;
@@ -15,6 +16,7 @@ interface ChatInterfaceProps {
 
 export function ChatInterface({ isPremium }: ChatInterfaceProps) {
   const t = useT();
+  const posthog = usePostHog();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -63,6 +65,7 @@ export function ChatInterface({ isPremium }: ChatInterfaceProps) {
       timestamp: new Date(),
     };
 
+    posthog.capture("dream_submitted", { word_count: text.trim().split(/\s+/).length });
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     if (textareaRef.current) {
@@ -89,6 +92,7 @@ export function ChatInterface({ isPremium }: ChatInterfaceProps) {
         timestamp: new Date(),
       };
 
+      posthog.capture("dream_interpreted");
       setMessages((prev) => [...prev, assistantMsg]);
     } catch (err) {
       const errorMsg: ChatMessage = {

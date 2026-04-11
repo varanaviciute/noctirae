@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { Moon, Sparkles, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useT } from "@/components/layout/LocaleProvider";
+import { usePostHog } from "posthog-js/react";
 
 function LoginForm() {
   const router = useRouter();
@@ -17,6 +18,7 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const posthog = usePostHog();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -32,6 +34,9 @@ function LoginForm() {
       setLoading(false);
       return;
     }
+
+    posthog.identify(data.user.id, { email: data.user.email });
+    posthog.capture("user_logged_in");
 
     const language = (data.user?.user_metadata?.language as string) ?? "en";
     localStorage.setItem("language", language);

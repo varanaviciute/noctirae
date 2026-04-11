@@ -7,6 +7,7 @@ import { Moon, Eye, EyeOff, ChevronDown, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/components/layout/LocaleProvider";
+import { usePostHog } from "posthog-js/react";
 
 const LANGUAGES = [
   { code: "en", label: "English",    flag: "🇬🇧" },
@@ -27,6 +28,8 @@ export default function RegisterPage() {
   const router = useRouter();
   const t = useT();
   const supabase = createClient();
+
+  const posthog = usePostHog();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -62,6 +65,7 @@ export default function RegisterPage() {
         setError(error.message);
         return;
       }
+      posthog.capture("user_registered", { email });
       setStep(2);
     } catch {
       setError(t.auth.fullNameError);

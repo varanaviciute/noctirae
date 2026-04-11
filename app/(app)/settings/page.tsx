@@ -12,6 +12,7 @@ import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { LanguageSelector } from "@/components/layout/LanguageSelector";
 import { SupportModal } from "@/components/layout/SupportModal";
 import { useT } from "@/components/layout/LocaleProvider";
+import { usePostHog } from "posthog-js/react";
 
 interface ProfileData {
   email: string;
@@ -35,6 +36,7 @@ function SettingsContent() {
   const [showSupport, setShowSupport] = useState(false);
   const [currentPlan, setCurrentPlan] = useState<"monthly" | "yearly" | null>(null);
   const [switchingPlan, setSwitchingPlan] = useState(false);
+  const posthog = usePostHog();
 
   const success = searchParams.get("success");
   const canceled = searchParams.get("canceled");
@@ -46,6 +48,10 @@ function SettingsContent() {
       const data = await res.json();
       setProfile(data);
       setLoading(false);
+
+      if (data.email) {
+        posthog.identify(data.email, { is_premium: data.is_premium });
+      }
 
       if (data.is_premium) {
         fetch("/api/subscription-info")
@@ -62,6 +68,9 @@ function SettingsContent() {
           if (!r.ok) { clearInterval(interval); return; }
           const d = await r.json();
           if (d.is_premium || attempts >= 10) {
+            if (d.is_premium && !profile?.is_premium) {
+              posthog.capture("premium_purchased", { plan: selectedPlan });
+            }
             setProfile(d);
             clearInterval(interval);
           }
@@ -72,6 +81,7 @@ function SettingsContent() {
   }, []);
 
   async function handleSubscribe() {
+    posthog.capture("upgrade_clicked", { plan: selectedPlan });
     setSubscribing(true);
     const res = await fetch("/api/subscribe", {
       method: "POST",
@@ -87,6 +97,7 @@ function SettingsContent() {
   }
 
   async function handleSwitchPlan(newPlan: "monthly" | "yearly") {
+    posthog.capture("plan_switched", { from: currentPlan, to: newPlan });
     setSwitchingPlan(true);
     await fetch("/api/switch-plan", {
       method: "POST",
@@ -98,6 +109,7 @@ function SettingsContent() {
   }
 
   async function handleManageSubscription() {
+    posthog.capture("manage_subscription_clicked");
     setSubscribing(true);
     const res = await fetch("/api/billing-portal", { method: "POST" });
     const data = await res.json();
